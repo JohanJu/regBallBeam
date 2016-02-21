@@ -20,7 +20,6 @@ public class PID {
 		setParameters(p);
 
 		this.I = 0.0;
-		this.D = 0.0;
 		this.v = 0.0;
 		this.e = 0.0;
 	}
@@ -28,7 +27,7 @@ public class PID {
 	// Calculates the control signal v.
 	// Called from BallAndBeamRegul.
 	public synchronized double calculateOutput(double y, double yref) {
-		e = yref - y;
+		e = yref-y;
 		v = p.K * p.Beta * e + I + D;
 		return v;
 	}
@@ -59,18 +58,4 @@ public class PID {
 			I = 0.0;
 		}
 	}
-
-	public synchronized PIDParameters getParameters() {
-		return p;
-	}
-
-	
-
-	public synchronized void reset() {
-		this.I = 0.0;
-		this.D = 0.0;
-		this.v = 0.0;
-		this.e = 0.0;
-	}
-
 }
