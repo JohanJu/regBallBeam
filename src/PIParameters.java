@@ -1,9 +1,7 @@
-public class PIDParameters implements Cloneable {
+public class PIParameters implements Cloneable {
 	double K;
 	double Ti;
 	double Tr;
-	double Td;
-	double N;
 	double Beta;
 	double H;
 	boolean integratorOn;
