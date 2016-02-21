@@ -3,7 +3,6 @@ public class PI {
 	// Current PID parameters
 	private PIParameters p;
 	private double I;
-	private double D;
 	private double v;
 	private double e;
 
@@ -20,7 +19,6 @@ public class PI {
 		setParameters(p);
 
 		this.I = 0.0;
-		this.D = 0.0;
 		this.v = 0.0;
 		this.e = 0.0;
 	}
@@ -29,7 +27,7 @@ public class PI {
 	// Called from BallAndBeamRegul.
 	public synchronized double calculateOutput(double y, double yref) {
 		e = yref - y;
-		v = p.K * p.Beta * e + I + D;
+		v = p.K * p.Beta * e + I;
 		return v;
 	}
 
