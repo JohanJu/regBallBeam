@@ -1,3 +1,4 @@
+package johan;
 public class PIParameters implements Cloneable {
 	public double K;
 	public double Ti;

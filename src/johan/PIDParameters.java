@@ -1,3 +1,4 @@
+package johan;
 public class PIDParameters implements Cloneable {
 	public double K;
 	public double Ti;

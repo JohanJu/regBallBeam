@@ -1,3 +1,4 @@
+package johan;
 import SimEnvironment.*;
 
 public class BallAndBeamRegul extends Thread {
