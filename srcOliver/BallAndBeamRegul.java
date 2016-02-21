@@ -41,6 +41,7 @@ public class BallAndBeamRegul extends Thread {
 				
 				// Set output
 				analogOut.set(u);
+				analogRef.set(u);
 				analogInPosition.set(u);
 				analogInAngle.set(u);
 				
