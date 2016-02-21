@@ -2,7 +2,8 @@ import SimEnvironment.*;
 
 public class BallAndBeamRegul extends Thread {
 	ReferenceGenerator refgen;
-	private PID cont;
+	private PID out;
+	private PI in;
 	private AnalogSource analogInAngle;
 	private AnalogSource analogInPosition;
 	private AnalogSink analogOut;
@@ -16,7 +17,8 @@ public class BallAndBeamRegul extends Thread {
 		analogInAngle = bb.getSource(1);
 		analogOut = bb.getSink(0);
 		analogRef = bb.getSink(1);
-		cont = new PID("PID");
+		out = new PID("PID");
+		in = new PI("PI");
 		setPriority(pri);
 	}
 
@@ -36,16 +38,16 @@ public class BallAndBeamRegul extends Thread {
 			double y = analogInAngle.get();
 			double ref = refgen.getRef();
 
-			synchronized (cont) { // To avoid parameter changes in between
+			synchronized (out) { // To avoid parameter changes in between
 				// Compute control signal
-				double u = limit(cont.calculateOutput(y, ref));
+				double u = limit(out.calculateOutput(y, ref));
 //				System.out.println(ref + "\t" + y + "\t" + u);
 				analogOut.set(u);
-				cont.updateState(u);
+				out.updateState(u);
 			}
 			analogRef.set(ref); // Only for the plotter animation
 
-			t = t + cont.getHMillis();
+			t = t + out.getHMillis();
 			long duration = t - System.currentTimeMillis();
 			if (duration > 0) {
 				try {
