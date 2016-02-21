@@ -1,3 +1,4 @@
+package johan;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.*;
@@ -11,7 +12,7 @@ public class BallAndBeam extends VirtualProcess {
     private static final int outputNbr=2; //number of outputs
 
     private double kPhi=4.4; //process coefficient for the angle
-    private double kX = 0.5; //process coefficient for the ball position
+    private double kX = 7.0; //process coefficient for the ball position
 
     private double scale = 100.0;
     private RoundRectangle2D box = new RoundRectangle2D.Double(100.0, 80.0, 100.0, 50.0, 10.0, 10.0);

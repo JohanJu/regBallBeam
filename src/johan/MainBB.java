@@ -1,3 +1,4 @@
+package johan;
 public class MainBB {
 	public static void main(String[] argv) {
 		final int regulPriority = 8;

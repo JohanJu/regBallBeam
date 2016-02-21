@@ -1,3 +1,4 @@
+package oliver;
 import SimEnvironment.*;
 
 public class BeamRegul extends Thread {

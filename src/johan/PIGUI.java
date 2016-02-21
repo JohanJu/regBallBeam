@@ -1,3 +1,4 @@
+package johan;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -10,7 +11,7 @@ public class PIGUI {
 	private JPanel paramsLabelPanel = new JPanel();
 	private JPanel paramsFieldPanel = new JPanel();
 	private BoxPanel paramsPanel = new BoxPanel(BoxPanel.HORIZONTAL);
-	private DoubleField paramsKField = new DoubleField(6,3);
+	private DoubleField paramsKField = new DoubleField(24,3);
 	private DoubleField paramsTiField = new DoubleField(6,3);
 	private DoubleField paramsTrField = new DoubleField(6,3);
 	private DoubleField paramsBetaField = new DoubleField(6,3);
@@ -120,3 +121,4 @@ public class PIGUI {
 
 
 }
+
