@@ -34,20 +34,26 @@ public class BallAndBeamRegul extends Thread {
 	public void run() {
 		long t = System.currentTimeMillis();
 		while (true) {
-			// Read inputs
-			double y = analogInAngle.get();
+			// outer
 			double ref = refgen.getRef();
-
-			synchronized (out) { // To avoid parameter changes in between
-				// Compute control signal
+			double y = analogInPosition.get();
+			synchronized (out) {
 				double u = limit(out.calculateOutput(y, ref));
-//				System.out.println(ref + "\t" + y + "\t" + u);
 				analogOut.set(u);
 				out.updateState(u);
+				ref = u;
 			}
+			// inner
+			y = analogInAngle.get();
+			synchronized (in) {
+				double u = limit(in.calculateOutput(y, ref));
+				analogOut.set(u);
+				in.updateState(u);
+			}
+			
+			
 			analogRef.set(ref); // Only for the plotter animation
-
-			t = t + out.getHMillis();
+			t = t + in.getHMillis();
 			long duration = t - System.currentTimeMillis();
 			if (duration > 0) {
 				try {

@@ -5,17 +5,20 @@ public class PID {
 	private double I;
 	private double D;
 	private double v;
+	private double oldy;
 	private double e;
 
 	// Constructor
 	public PID(String name) {
 		PIDParameters p = new PIDParameters();
 		p.Beta = 1.0;
-		p.H = 0.1;
+		p.H = 0.05;
 		p.integratorOn = false;
-		p.K = 1.0;
+		p.K = -0.1;
 		p.Ti = 0.0;
 		p.Tr = 10.0;
+		p.Td = 1;
+		p.N = 8;
 		new PIDGUI(this, p, name);
 		setParameters(p);
 
@@ -28,6 +31,9 @@ public class PID {
 	// Called from BallAndBeamRegul.
 	public synchronized double calculateOutput(double y, double yref) {
 		e = yref-y;
+		D = p.Td*(y-oldy)/p.H;
+		
+		oldy = y;
 		v = p.K * p.Beta * e + I + D;
 		return v;
 	}
@@ -41,6 +47,8 @@ public class PID {
 		} else {
 			I = 0.0;
 		}
+//		D = p.Td*(v-oldv)/p.H;
+		oldy = v;
 	}
 
 	// Returns the sampling interval expressed as a long.

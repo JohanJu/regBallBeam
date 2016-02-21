@@ -10,7 +10,7 @@ public class PI {
 	public PI(String name) {
 		PIParameters p = new PIParameters();
 		p.Beta = 1.0;
-		p.H = 0.1;
+		p.H = 0.05;
 		p.integratorOn = false;
 		p.K = 1.0;
 		p.Ti = 0.0;
