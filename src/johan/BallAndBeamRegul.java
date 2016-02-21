@@ -22,8 +22,16 @@ public class BallAndBeamRegul extends Thread {
 		in = new PI("PI");
 		setPriority(pri);
 	}
-
+	private double mm = 10.0;
 	private double limit(double u) {
+		if (u < -mm) {
+			u = -mm;
+		} else if (u > mm) {
+			u = mm;
+		}
+		return u;
+	}
+	private double limit2(double u) {
 		if (u < umin) {
 			u = umin;
 		} else if (u > umax) {
@@ -40,14 +48,14 @@ public class BallAndBeamRegul extends Thread {
 			double y = analogInPosition.get();
 			synchronized (out) {
 				double u = limit(out.calculateOutput(y, ref));
-				analogOut.set(u);
 				out.updateState(u);
 				ref = u;
 			}
+			
 			// inner
 			y = analogInAngle.get();
 			synchronized (in) {
-				double u = limit(in.calculateOutput(y, ref));
+				double u = limit2(in.calculateOutput(y, ref));
 				analogOut.set(u);
 				in.updateState(u);
 			}

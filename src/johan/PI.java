@@ -13,7 +13,7 @@ public class PI {
 		p.Beta = 1.0;
 		p.H = 0.05;
 		p.integratorOn = false;
-		p.K = 1.0;
+		p.K = 10.0;
 		p.Ti = 0.0;
 		p.Tr = 10.0;
 		new PIGUI(this, p, name);
@@ -29,6 +29,7 @@ public class PI {
 	public synchronized double calculateOutput(double y, double yref) {
 		e = yref-y;
 		v = p.K * p.Beta * e + I;
+//		System.out.println(e+"\t"+v);
 		return v;
 	}
 

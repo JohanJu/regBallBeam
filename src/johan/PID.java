@@ -18,7 +18,7 @@ public class PID {
 		p.K = -0.1;
 		p.Ti = 0.0;
 		p.Tr = 10.0;
-		p.Td = 1;
+		p.Td = 0.8;
 		p.N = 8;
 		new PIDGUI(this, p, name);
 		setParameters(p);
@@ -32,10 +32,17 @@ public class PID {
 	// Called from BallAndBeamRegul.
 	public synchronized double calculateOutput(double y, double yref) {
 		e = yref-y;
-		D = p.Td*(y-oldy)/p.H;
-		
+		double a = 0.5;
+		D = p.Td*(y-oldy);
+		double max = p.N;
+		if(D>max){
+			D = max;
+		}else if(D<-max){
+			D = -max;
+		}
 		oldy = y;
 		v = p.K * p.Beta * e + I + D;
+//		System.out.println(D+"\t"+p.K * p.Beta * e+"\t"+v);
 		return v;
 	}
 
