@@ -14,13 +14,13 @@ public class PID {
 	public PID(String name){
 		PIDParameters p = new PIDParameters();
 		  p.Beta = 1.0;
-		  p.H = 0.1;
+		  p.H = 0.2;
 		  p.integratorOn = false;
-		  p.K = -0.1;
+		  p.K = -0.15;
 		  p.Ti = 0.0;
 		  p.Tr = 10.0;
 		  p.N = 5;
-		  p.Td = 0.8;
+		  p.Td = 4.0;
 		  new PIDGUI(this, p, name);
 		  setParameters(p);
 		  ad = p.Td / (p.Td + p.N*p.H);
@@ -30,6 +30,7 @@ public class PID {
 		  this.I = 0.0;
 		  this.v = 0.0;
 		  this.e = 0.0;
+	
 	}
 	
 	// Calculates the control signal v.
