@@ -1,59 +1,68 @@
 package oliver;
-
-
 import SimEnvironment.*;
 
-// BallAndBeamRegul class to be written by you
 public class BallAndBeamRegul extends Thread {
-	// Constructor
-	  private AnalogSource analogInAngle;
-	  private AnalogSource analogInPosition;
-	  private AnalogSink analogOut;
-	  private AnalogSink analogRef;
-	private ReferenceGenerator referenceGenerator;
-	private PID controller;
+	ReferenceGenerator refgen;
+	private PID out;
+	private PI in;
+	private AnalogSource analogInAngle;
+	private AnalogSource analogInPosition;
+	private AnalogSink analogOut;
+	private AnalogSink analogRef;
+	private double umin = -10.0;
+	private double umax = 10.0;
 
-	
-	
-	//Define min and max control output
-	private double uMin = -10.0;
-	private double uMax = 10.0;
-	
-	public BallAndBeamRegul(ReferenceGenerator refgen, BallAndBeam bb, int priority){
-		  // In Constructor
-		  analogInPosition = bb.getSource(0);
-		  analogInAngle = bb.getSource(1);
-		  analogOut = bb.getSink(0);
-		  analogRef = bb.getSink(1);
-		  referenceGenerator = refgen;
-		  controller = new PID("PID");
-		  setPriority(priority);
-		
+	public BallAndBeamRegul(ReferenceGenerator refgen, BallAndBeam bb, int pri) {
+		this.refgen = refgen;
+		analogInPosition = bb.getSource(0);
+		analogInAngle = bb.getSource(1);
+		analogOut = bb.getSink(0);
+		analogRef = bb.getSink(1);
+		out = new PID("PID");
+		in = new PI("PI");
+		setPriority(pri);
 	}
-	
-	public void run(){
+	private double mm = 10.0;
+	private double limit(double u) {
+		if (u < -mm) {
+			u = -mm;
+		} else if (u > mm) {
+			u = mm;
+		}
+		return u;
+	}
+	private double limit2(double u) {
+		if (u < umin) {
+			u = umin;
+		} else if (u > umax) {
+			u = umax;
+		}
+		return u;
+	}
+
+	public void run() {
 		long t = System.currentTimeMillis();
 		while (true) {
-			// Read inputs
-			double y = analogRef.get();
-			double ref = referenceGenerator.getRef();
-			
-			synchronized (controller) { // To avoid parameter changes in between
-				// Compute control signal
-				double u = limit(controller.calculateOutput(y, ref), uMin, uMax);
-				
-				// Set output
-				analogOut.set(u);
-				analogRef.set(u);
-				analogInPosition.set(u);
-				analogInAngle.set(u);
-				
-				// Update state
-				controller.updateState(u);
+			// outer
+			double ref = refgen.getRef();
+			double y = analogInPosition.get();
+			synchronized (out) {
+				double u = limit(out.calculateOutput(y, ref));
+				out.updateState(u);
+				ref = u;
 			}
-			analogRef.set(ref); // Only for the plotter animation
 			
-			t = t + controller.getHMillis();
+			// inner
+			y = analogInAngle.get();
+			synchronized (in) {
+				double u = limit2(in.calculateOutput(y, ref));
+				analogOut.set(u);
+				in.updateState(u);
+			}
+			
+			
+			analogRef.set(ref); // Only for the plotter animation
+			t = t + in.getHMillis();
 			long duration = t - System.currentTimeMillis();
 			if (duration > 0) {
 				try {
@@ -63,19 +72,5 @@ public class BallAndBeamRegul extends Thread {
 				}
 			}
 		}
-	
 	}
-
-		//Saturate output at limits
-	private double limit(double u, double umin, double umax) {
-		if (u < umin) {
-			u = umin;
-		} else if (u > umax) {
-			u = umax;
-		} 
-		return u;
-	}
-	
-
-	
 }

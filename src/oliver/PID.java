@@ -16,10 +16,11 @@ public class PID {
 		  p.Beta = 1.0;
 		  p.H = 0.1;
 		  p.integratorOn = false;
-		  p.K = 1;
+		  p.K = -0.1;
 		  p.Ti = 0.0;
 		  p.Tr = 10.0;
 		  p.N = 5;
+		  p.Td = 0.8;
 		  new PIDGUI(this, p, name);
 		  setParameters(p);
 		  ad = p.Td / (p.Td + p.N*p.H);
@@ -34,10 +35,18 @@ public class PID {
 	// Calculates the control signal v.
 	// Called from BallAndBeamRegul.
 	public synchronized double calculateOutput(double y, double yref){
-		newY = y;
-		e = yref - y;
-		D = ad*D - bd*(y - yOld);
-		v = p.K*(p.Beta*yref - y) + I + D;
+		e = yref-y;
+		double a = 0.5;
+		D = p.Td*(y-yOld);
+		double max = p.N;
+		if(D>max){
+			D = max;
+		}else if(D<-max){
+			D = -max;
+		}
+		yOld = y;
+		v = p.K * p.Beta * e + I + D;
+//		System.out.println(D+"\t"+p.K * p.Beta * e+"\t"+v);
 		return v;
 	}
 	
