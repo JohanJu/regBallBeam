@@ -2,7 +2,7 @@ package oliver;
 import SimEnvironment.*;
 
 public class BallAndBeamRegul extends Thread {
-	ReferenceGenerator refgen;
+	ReferenceGenerator referenceGenerator;
 	private PID out;
 	private PI in;
 	private AnalogSource analogInAngle;
@@ -13,11 +13,12 @@ public class BallAndBeamRegul extends Thread {
 	private double umax = 10.0;
 
 	public BallAndBeamRegul(ReferenceGenerator refgen, BallAndBeam bb, int pri) {
-		this.refgen = refgen;
+		
 		analogInPosition = bb.getSource(0);
 		analogInAngle = bb.getSource(1);
 		analogOut = bb.getSink(0);
 		analogRef = bb.getSink(1);
+		referenceGenerator = refgen;
 		out = new PID("PID");
 		in = new PI("PI");
 		setPriority(pri);
@@ -44,18 +45,21 @@ public class BallAndBeamRegul extends Thread {
 		long t = System.currentTimeMillis();
 		while (true) {
 			// outer
-			double ref = refgen.getRef();
+			double ref = referenceGenerator.getRef();
 			double y = analogInPosition.get();
+			double uref = ref;
+			
 			synchronized (out) {
 				double u = limit(out.calculateOutput(y, ref));
 				out.updateState(u);
-				ref = u;
+				uref = u;
 			}
 			
 			// inner
 			y = analogInAngle.get();
+			
 			synchronized (in) {
-				double u = limit2(in.calculateOutput(y, ref));
+				double u = limit2(in.calculateOutput(y, uref));
 				analogOut.set(u);
 				in.updateState(u);
 			}

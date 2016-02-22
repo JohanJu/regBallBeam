@@ -14,9 +14,9 @@ public class PID {
 	public PID(String name){
 		PIDParameters p = new PIDParameters();
 		  p.Beta = 1.0;
-		  p.H = 0.2;
+		  p.H = 0.05;
 		  p.integratorOn = false;
-		  p.K = -0.15;
+		  p.K = -0.2;
 		  p.Ti = 0.0;
 		  p.Tr = 10.0;
 		  p.N = 5;

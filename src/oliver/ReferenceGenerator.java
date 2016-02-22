@@ -1,4 +1,5 @@
 package oliver;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -104,6 +105,7 @@ public class ReferenceGenerator extends Thread {
 					sign = - sign;
 					ref = amplitude * sign;
 				}
+				System.out.println("Ref = " + ref);
 				sleep(period);
 			}
 		} catch (InterruptedException e) {
