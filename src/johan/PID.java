@@ -13,13 +13,13 @@ public class PID {
 	public PID(String name) {
 		PIDParameters p = new PIDParameters();
 		p.Beta = 1.0;
-		p.H = 0.05;
-		p.integratorOn = false;
-		p.K = -0.1;
-		p.Ti = 0.0;
-		p.Tr = 10.0;
-		p.Td = 0.8;
-		p.N = 8;
+		  p.H = 0.05;
+		  p.integratorOn = false;
+		  p.K = -0.2;
+		  p.Ti = 0.0;
+		  p.Tr = 10.0;
+		  p.N = 5;
+		  p.Td = 4.0;
 		new PIDGUI(this, p, name);
 		setParameters(p);
 
@@ -56,7 +56,7 @@ public class PID {
 			I = 0.0;
 		}
 //		D = p.Td*(v-oldv)/p.H;
-		oldy = v;
+//		oldy = v;
 	}
 
 	// Returns the sampling interval expressed as a long.

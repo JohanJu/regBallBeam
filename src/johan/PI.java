@@ -11,11 +11,11 @@ public class PI {
 	public PI(String name) {
 		PIParameters p = new PIParameters();
 		p.Beta = 1.0;
-		p.H = 0.05;
-		p.integratorOn = false;
-		p.K = 10.0;
-		p.Ti = 0.0;
-		p.Tr = 10.0;
+		  p.H = 0.05;
+		  p.integratorOn = false;
+		  p.K = 4.0;
+		  p.Ti = 0.0;
+		  p.Tr = 10.0;
 		new PIGUI(this, p, name);
 		setParameters(p);
 
